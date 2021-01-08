@@ -1,20 +1,18 @@
-using System.Reflection.Metadata;
-using System.Linq;
-using System.Collections;
 using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Collections.Generic;
 namespace BibliotecaWeb.Data
 {
-    public interface IRepository<T> where T : class
+    public interface IRepository<T> where T : IBaseId
     {
-        T Load(params object[] keyValues);
-        IQueryable<T> Load(IEnumerable<int> ids);
-        ValueTask<T> LoadAsync(params object[] keyValues);
-        IQueryable<T> Collection(Expression<Func<T, bool>> where);
-        void UpdateOrAdd(T entity);
+        IQueryable<T> Collection(Expression<Func<T, bool>> conditions);
+        IQueryable<T> Collection();
+        ValueTask<T> LoadAsync(params object[] KeyValues);
+        T Load(params object[] KeyValues);
+        void AddOrUpdate(T entity);
         void Delete(T entity);
     }
 }

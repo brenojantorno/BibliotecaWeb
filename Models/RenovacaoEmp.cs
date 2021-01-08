@@ -11,7 +11,7 @@ namespace BibliotecaWeb.Models
 
         public int IdEmprestimo { get; set; }
 
-        public Emprestimo Emprestimo { get; set; }
+        public virtual Emprestimo Emprestimo { get; set; }
 
     }
 }

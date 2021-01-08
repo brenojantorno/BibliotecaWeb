@@ -31,6 +31,8 @@ namespace BibliotecaWeb
             services.AddControllers();
             services.AddDbContext<BibliotecaDataContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("default")));
+
+            services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

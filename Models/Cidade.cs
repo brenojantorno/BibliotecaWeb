@@ -1,3 +1,5 @@
+using System.Linq;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System;
 using BibliotecaWeb.Data;
@@ -12,6 +14,8 @@ namespace BibliotecaWeb.Models
 
         public int IdUF { get; set; }
 
-        public UF UF { get; set; }
+        public virtual UF UF { get; set; }
+
+        public virtual ICollection<Endereco> Enderecos { get; set; }
     }
 }

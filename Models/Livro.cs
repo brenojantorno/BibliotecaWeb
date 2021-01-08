@@ -16,6 +16,6 @@ namespace BibliotecaWeb.Models
         public int QtdCopias { get; set; }
         public string CodigoNacional { get; set; }
         public string CodigoInternacional { get; set; }
-        public ICollection<Emprestimo> Emprestimos { get; set; }
+        public virtual ICollection<Emprestimo> Emprestimos { get; set; }
     }
 }

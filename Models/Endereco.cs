@@ -13,7 +13,7 @@ namespace BibliotecaWeb.Models
         public int Bairro { get; set; }
         public string Cep { get; set; }
         public int IdCidade { get; set; }
-        public Cidade Cidade { get; set; }
-        public ICollection<Pessoa> Pessoas { get; set; }
+        public virtual Cidade Cidade { get; set; }
+        public virtual ICollection<Pessoa> Pessoas { get; set; }
     }
 }
