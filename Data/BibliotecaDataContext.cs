@@ -21,7 +21,6 @@ namespace BibliotecaWeb.Data
         public DbSet<Pessoa> Pessoa { get; set; }
         public DbSet<RenovacaoEmp> RenovacaoEmp { get; set; }
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 

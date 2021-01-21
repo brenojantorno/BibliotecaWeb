@@ -1,6 +1,4 @@
-using System.Data.Common;
 using System.Linq;
-using System.Security.AccessControl;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,103 +14,38 @@ namespace BibliotecaWeb.Controllers
     [ApiController]
     public class UFController : ControllerBase
     {
-        private readonly IRepository<UF> _repository;
-        private readonly BibliotecaDataContext _context;
-        public UFController(IRepository<UF> repository, BibliotecaDataContext context)
+        private readonly BibliotecaDataContext _repository;
+        public UFController(BibliotecaDataContext repository)
         {
-            _context = context;
             _repository = repository;
         }
 
         Func<UF, dynamic> lambda = (obj) => new
         {
-            id = obj.Id,
-            nome = obj.Nome,
+            id = obj?.Id,
+            nome = obj?.Nome,
             sigla = obj?.Sigla,
             cidades = obj?.Cidades?.Select(cd => new
             {
-                id = cd.Id,
-                nome = cd.Nome,
+                id = cd?.Id,
+                nome = cd?.Nome,
             })
         };
 
-
-        [HttpGet("")]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<UF>>> Get()
         {
-            return Ok(await _repository.Collection()?.ToListAsync());
+            var lista = await _repository.UF?.ToListAsync();
+
+            return Ok(lista?.Select(uf => lambda(uf)));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<UF>> GetId(int id)
+        public async Task<ActionResult<UF>> Get(int id)
         {
-            var obj = await _repository.LoadAsync(id);
-            if (obj == null)
-                return BadRequest();
+            var obj = await _repository.UF.FindAsync(id);
 
             return Ok(lambda(obj));
         }
-
-        [HttpPost()]
-        public async Task<ActionResult<UF>> Post(VUF model)
-        {
-            if (ModelState.IsValid)
-            {
-                var obj = VUF.InitializeObject(_repository, model);
-
-                if (obj == null)
-                    return BadRequest();
-
-
-                _repository.AddOrUpdate(obj);
-                await _context.SaveChangesAsync();
-
-                return Ok(lambda(obj));
-            }
-
-            return BadRequest();
-        }
-
-
-        [HttpPut()]
-        public async Task<ActionResult<UF>> Put(VUF model)
-        {
-            if (ModelState.IsValid)
-            {
-                var obj = VUF.InitializeObject(_repository, model);
-
-                if (obj.Id == 0)
-                    return BadRequest();
-
-                _repository.AddOrUpdate(obj);
-                await _context.SaveChangesAsync();
-
-                return Ok(lambda(obj));
-            }
-
-            return BadRequest();
-        }
-
-        [HttpDelete()]
-        public async Task<IActionResult> Delete(int id)
-        {
-            if (ModelState.IsValid)
-            {
-                var obj = _repository.LoadAsync(id);
-
-                if (obj == null)
-                    return BadRequest();
-
-
-                _repository.Delete(obj.Result);
-                await _context.SaveChangesAsync();
-
-                return Ok();
-            }
-
-            return BadRequest();
-        }
-
-
     }
 }
